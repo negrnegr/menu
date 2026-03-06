@@ -7,7 +7,17 @@
 <style>
   @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Share+Tech+Mono&display=swap');
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+  * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; }
+
+  #custom-cursor {
+    position: fixed;
+    width: 14px;
+    height: 14px;
+    pointer-events: none;
+    z-index: 9999999;
+    display: none;
+    transform: translate(-1px, -1px);
+  }
 
   body {
     background: transparent;
@@ -272,6 +282,12 @@
 </head>
 <body>
 
+<div id="custom-cursor">
+  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M1 1L5.5 12L7.5 7.5L12 5.5L1 1Z" fill="white" stroke="#000" stroke-width="0.8"/>
+  </svg>
+</div>
+
 <div class="watermark">xyzmenu.xyz</div>
 
 <div class="menu">
@@ -421,6 +437,56 @@
 </div>
 
 <script>
+  var cursorEl = document.getElementById('custom-cursor');
+  var cursorX = 0;
+  var cursorY = 0;
+  var cursorVisible = false;
+
+  function showCursor() {
+    cursorEl.style.display = 'block';
+    cursorVisible = true;
+  }
+
+  function hideCursor() {
+    cursorEl.style.display = 'none';
+    cursorVisible = false;
+  }
+
+  function moveCursor(nx, ny) {
+    cursorX = nx * window.innerWidth;
+    cursorY = ny * window.innerHeight;
+    cursorEl.style.left = cursorX + 'px';
+    cursorEl.style.top = cursorY + 'px';
+  }
+
+  function clickCursor() {
+    var el = document.elementFromPoint(cursorX, cursorY);
+    if (el) el.click();
+  }
+
+  function mouseDownCursor() {
+    var el = document.elementFromPoint(cursorX, cursorY);
+    if (el) {
+      var ev = new MouseEvent('mousedown', {clientX: cursorX, clientY: cursorY, bubbles: true});
+      el.dispatchEvent(ev);
+    }
+  }
+
+  function mouseUpCursor() {
+    var ev = new MouseEvent('mouseup', {clientX: cursorX, clientY: cursorY, bubbles: true});
+    document.dispatchEvent(ev);
+  }
+
+  function mouseMoveCursor(nx, ny) {
+    cursorX = nx * window.innerWidth;
+    cursorY = ny * window.innerHeight;
+    cursorEl.style.left = cursorX + 'px';
+    cursorEl.style.top = cursorY + 'px';
+    var ev = new MouseEvent('mousemove', {clientX: cursorX, clientY: cursorY, bubbles: true});
+    var el = document.elementFromPoint(cursorX, cursorY);
+    if (el) el.dispatchEvent(ev);
+  }
+
   var currentPanel = 0;
   var currentItem = 0;
   var panels = [];

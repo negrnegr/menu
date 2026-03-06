@@ -53,7 +53,6 @@
     background: #000116;
     border: 1px solid #2D2D30;
     border-top: 3px solid #6e6e6e;
-    border-radius: 0;
     user-select: none;
     display: flex;
     flex-direction: column;
@@ -77,9 +76,7 @@
     height: 26px;
     gap: 1px;
     flex-shrink: 0;
-    cursor: grab;
   }
-  .header:active { cursor: grabbing; }
 
   .nav-tab {
     padding: 0 8px;
@@ -89,7 +86,6 @@
     font-size: 9px;
     font-weight: 600;
     color: rgba(255,255,255,0.8);
-    cursor: pointer;
     transition: all 0.15s;
     letter-spacing: 0.4px;
     border-bottom: 2px solid transparent;
@@ -125,7 +121,6 @@
     font-family: 'JetBrains Mono', monospace;
     font-weight: 600;
     padding: 4px 22px 4px 8px;
-    cursor: pointer;
     transition: border-color 0.15s;
     display: flex;
     align-items: center;
@@ -156,7 +151,6 @@
     font-size: 9px;
     font-family: 'JetBrains Mono', monospace;
     color: rgba(255,255,255,0.75);
-    cursor: pointer;
     transition: background 0.1s;
     letter-spacing: 0.3px;
   }
@@ -211,11 +205,9 @@
   .checkbox {
     width: 11px; height: 11px;
     background: #6e6e6e;
-    border-radius: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    cursor: pointer;
     flex-shrink: 0;
   }
   .checkbox::after {
@@ -235,7 +227,6 @@
     margin-left: auto;
     color: rgba(255,255,255,0.3);
     font-size: 10px;
-    cursor: pointer;
     transition: color 0.15s;
   }
   .gear-btn:hover { color: rgba(255,255,255,0.7); }
@@ -262,19 +253,11 @@
     position: relative;
     height: 3px;
     background: #2D2D30;
-    border-radius: 0;
-    cursor: pointer;
   }
   .slider-fill {
     height: 100%;
-    border-radius: 0;
     background: #6e6e6e;
     transition: width 0.05s;
-  }
-
-  .focused {
-    outline: 1px solid rgba(110,110,110,0.8);
-    outline-offset: 1px;
   }
 
   hr.divider { border: none; border-top: 1px solid #2D2D30; margin: 6px 0; }
@@ -317,18 +300,18 @@
 
   <div class="panels">
 
-    <div class="panel" data-panel="0">
+    <div class="panel">
       <div class="panel-title">Aimbot <span class="gear-btn">⚙</span></div>
-      <div class="toggle-row" data-item="0">
+      <div class="toggle-row">
         <div class="checkbox" onclick="this.classList.toggle('off')"></div>
         <span class="toggle-label">Enabled</span>
       </div>
-      <div class="field" data-item="1">
+      <div class="field">
         <div class="field-label">Field of View</div>
         <div class="field-value">10.00°</div>
         <div class="slider-wrap"><div class="slider-fill" style="width:18%"></div></div>
       </div>
-      <div class="field" data-item="2">
+      <div class="field">
         <div class="field-label">Hitboxes</div>
         <div class="custom-select sm">
           <div class="cs-selected">Head, Neck, Chest, ...</div>
@@ -339,35 +322,35 @@
           </div>
         </div>
       </div>
-      <div class="field" data-item="3">
+      <div class="field">
         <div class="field-label">Speed</div>
         <div class="field-value">0.10</div>
         <div class="slider-wrap"><div class="slider-fill" style="width:12%"></div></div>
       </div>
-      <div class="field" data-item="4">
+      <div class="field">
         <div class="field-label">Curve strength</div>
         <div class="field-value">0.50</div>
         <div class="slider-wrap"><div class="slider-fill" style="width:50%"></div></div>
       </div>
-      <div class="field" data-item="5">
+      <div class="field">
         <div class="field-label">Target switch delay</div>
         <div class="field-value">112ms</div>
         <div class="slider-wrap"><div class="slider-fill" style="width:35%"></div></div>
       </div>
-      <div class="field" data-item="6">
+      <div class="field">
         <div class="field-label">Shots required</div>
         <div class="field-value">0 shots</div>
         <div class="slider-wrap"><div class="slider-fill" style="width:0%"></div></div>
       </div>
     </div>
 
-    <div class="panel" data-panel="1">
+    <div class="panel">
       <div class="panel-title">Triggerbot</div>
-      <div class="toggle-row" data-item="0">
+      <div class="toggle-row">
         <div class="checkbox" onclick="this.classList.toggle('off')"></div>
         <span class="toggle-label">Enabled</span>
       </div>
-      <div class="field" data-item="1">
+      <div class="field">
         <div class="field-label">Hitboxes</div>
         <div class="custom-select sm">
           <div class="cs-selected">Head, Neck, Chest, ...</div>
@@ -377,30 +360,30 @@
           </div>
         </div>
       </div>
-      <div class="field" data-item="2">
+      <div class="field">
         <div class="field-label">Hit chance</div>
         <div class="field-value">70%</div>
         <div class="slider-wrap"><div class="slider-fill" style="width:70%"></div></div>
       </div>
-      <div class="field" data-item="3">
+      <div class="field">
         <div class="field-label">Reaction time</div>
         <div class="field-value">109ms</div>
         <div class="slider-wrap"><div class="slider-fill" style="width:40%"></div></div>
       </div>
     </div>
 
-    <div class="panel" data-panel="2">
+    <div class="panel">
       <div class="panel-title">Silent <span class="gear-btn">⚙</span></div>
-      <div class="toggle-row" data-item="0">
+      <div class="toggle-row">
         <div class="checkbox" onclick="this.classList.toggle('off')"></div>
         <span class="toggle-label">Enabled</span>
       </div>
-      <div class="field" data-item="1">
+      <div class="field">
         <div class="field-label">Field of View</div>
         <div class="field-value">10.00°</div>
         <div class="slider-wrap"><div class="slider-fill" style="width:18%"></div></div>
       </div>
-      <div class="field" data-item="2">
+      <div class="field">
         <div class="field-label">Hitboxes</div>
         <div class="custom-select sm">
           <div class="cs-selected">Head, Neck, Chest, ...</div>
@@ -411,22 +394,22 @@
           </div>
         </div>
       </div>
-      <div class="field" data-item="3">
+      <div class="field">
         <div class="field-label">Speed</div>
         <div class="field-value">0.10</div>
         <div class="slider-wrap"><div class="slider-fill" style="width:12%"></div></div>
       </div>
-      <div class="field" data-item="4">
+      <div class="field">
         <div class="field-label">Curve strength</div>
         <div class="field-value">0.50</div>
         <div class="slider-wrap"><div class="slider-fill" style="width:50%"></div></div>
       </div>
-      <div class="field" data-item="5">
+      <div class="field">
         <div class="field-label">Target switch delay</div>
         <div class="field-value">112ms</div>
         <div class="slider-wrap"><div class="slider-fill" style="width:35%"></div></div>
       </div>
-      <div class="field" data-item="6">
+      <div class="field">
         <div class="field-label">Shots required</div>
         <div class="field-value">0 shots</div>
         <div class="slider-wrap"><div class="slider-fill" style="width:0%"></div></div>
@@ -440,16 +423,19 @@
   var cursorEl = document.getElementById('custom-cursor');
   var cursorX = 0;
   var cursorY = 0;
-  var cursorVisible = false;
+  var isDragging = false;
+  var dragTarget = null;
+  var dragOffsetX = 0;
+  var dragOffsetY = 0;
+  var activeSlider = null;
+  var menuVisible = true;
 
   function showCursor() {
     cursorEl.style.display = 'block';
-    cursorVisible = true;
   }
 
   function hideCursor() {
     cursorEl.style.display = 'none';
-    cursorVisible = false;
   }
 
   function moveCursor(nx, ny) {
@@ -457,68 +443,109 @@
     cursorY = ny * window.innerHeight;
     cursorEl.style.left = cursorX + 'px';
     cursorEl.style.top = cursorY + 'px';
-  }
 
-  function clickCursor() {
-    var el = document.elementFromPoint(cursorX, cursorY);
-    if (el) el.click();
-  }
+    if (activeSlider) {
+      var rect = activeSlider.getBoundingClientRect();
+      var x = Math.max(0, Math.min(1, (cursorX - rect.left) / rect.width));
+      activeSlider.querySelector('.slider-fill').style.width = (x * 100) + '%';
+      var field = activeSlider.closest('.field');
+      if (field) updateSliderLabel(field, x);
+    }
 
-  function mouseDownCursor() {
-    var el = document.elementFromPoint(cursorX, cursorY);
-    if (el) {
-      var ev = new MouseEvent('mousedown', {clientX: cursorX, clientY: cursorY, bubbles: true});
-      el.dispatchEvent(ev);
+    if (isDragging && dragTarget) {
+      dragTarget.style.left = (cursorX - dragOffsetX) + 'px';
+      dragTarget.style.top = (cursorY - dragOffsetY) + 'px';
     }
   }
 
-  function mouseUpCursor() {
-    var ev = new MouseEvent('mouseup', {clientX: cursorX, clientY: cursorY, bubbles: true});
-    document.dispatchEvent(ev);
-  }
-
-  function mouseMoveCursor(nx, ny) {
-    cursorX = nx * window.innerWidth;
-    cursorY = ny * window.innerHeight;
-    cursorEl.style.left = cursorX + 'px';
-    cursorEl.style.top = cursorY + 'px';
-    var ev = new MouseEvent('mousemove', {clientX: cursorX, clientY: cursorY, bubbles: true});
+  function cursorDown() {
     var el = document.elementFromPoint(cursorX, cursorY);
-    if (el) el.dispatchEvent(ev);
-  }
+    if (!el) return;
 
-  var currentPanel = 0;
-  var currentItem = 0;
-  var panels = [];
-  var tabs = [];
-  var activeTab = 0;
-  var dropdownOpen = false;
-  var menuVisible = true;
-
-  function initNavigation() {
-    tabs = Array.from(document.querySelectorAll('.nav-tab'));
-    panels = Array.from(document.querySelectorAll('.panel'));
-    updateFocus();
-  }
-
-  function getItems(panelIndex) {
-    if (!panels[panelIndex]) return [];
-    return Array.from(panels[panelIndex].querySelectorAll('[data-item]'));
-  }
-
-  function clearFocus() {
-    document.querySelectorAll('.focused').forEach(function(el) {
-      el.classList.remove('focused');
-    });
-  }
-
-  function updateFocus() {
-    clearFocus();
-    var items = getItems(currentPanel);
-    if (items.length > 0 && items[currentItem]) {
-      items[currentItem].classList.add('focused');
-      items[currentItem].scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    var slider = el.closest('.slider-wrap');
+    if (slider) {
+      activeSlider = slider;
+      var rect = slider.getBoundingClientRect();
+      var x = Math.max(0, Math.min(1, (cursorX - rect.left) / rect.width));
+      slider.querySelector('.slider-fill').style.width = (x * 100) + '%';
+      var field = slider.closest('.field');
+      if (field) updateSliderLabel(field, x);
+      return;
     }
+
+    var header = el.closest('.header');
+    if (header && !el.closest('.nav-tab')) {
+      var menuEl = document.querySelector('.menu');
+      isDragging = true;
+      dragTarget = menuEl;
+      dragOffsetX = cursorX - menuEl.getBoundingClientRect().left;
+      dragOffsetY = cursorY - menuEl.getBoundingClientRect().top;
+      return;
+    }
+  }
+
+  function cursorUp() {
+    if (activeSlider) {
+      activeSlider = null;
+      return;
+    }
+
+    if (isDragging) {
+      isDragging = false;
+      dragTarget = null;
+      return;
+    }
+
+    var el = document.elementFromPoint(cursorX, cursorY);
+    if (!el) return;
+
+    var cb = el.closest('.checkbox');
+    if (cb) {
+      cb.classList.toggle('off');
+      return;
+    }
+
+    var toggleLabel = el.closest('.toggle-row');
+    if (toggleLabel) {
+      var cbIn = toggleLabel.querySelector('.checkbox');
+      if (cbIn) cbIn.classList.toggle('off');
+      return;
+    }
+
+    var opt = el.closest('.cs-option');
+    if (opt) {
+      var sel = opt.closest('.custom-select');
+      sel.querySelectorAll('.cs-option').forEach(function(o) { o.classList.remove('selected'); });
+      opt.classList.add('selected');
+      sel.querySelector('.cs-selected').textContent = opt.textContent;
+      sel.querySelector('.cs-options').classList.remove('open');
+      return;
+    }
+
+    var csSelected = el.closest('.cs-selected');
+    if (csSelected) {
+      var sel = csSelected.closest('.custom-select');
+      var opts = sel.querySelector('.cs-options');
+      var wasOpen = opts.classList.contains('open');
+      document.querySelectorAll('.cs-options.open').forEach(function(o) { o.classList.remove('open'); });
+      if (!wasOpen) {
+        var rect = csSelected.getBoundingClientRect();
+        opts.style.top = rect.bottom + 'px';
+        opts.style.left = rect.left + 'px';
+        opts.style.width = rect.width + 'px';
+        opts.classList.add('open');
+      }
+      return;
+    }
+
+    var tab = el.closest('.nav-tab');
+    if (tab) {
+      document.querySelectorAll('.nav-tab').forEach(function(t) { t.classList.remove('active'); });
+      tab.classList.add('active');
+      return;
+    }
+
+    document.querySelectorAll('.cs-options.open').forEach(function(o) { o.classList.remove('open'); });
   }
 
   function toggleMenu() {
@@ -528,154 +555,12 @@
     if (menuVisible) {
       menu.classList.remove('hidden');
       wm.style.display = '';
+      showCursor();
     } else {
       menu.classList.add('hidden');
       wm.style.display = 'none';
+      hideCursor();
     }
-  }
-
-  function navigateUp() {
-    if (dropdownOpen) return;
-    var items = getItems(currentPanel);
-    if (items.length === 0) return;
-    currentItem--;
-    if (currentItem < 0) currentItem = items.length - 1;
-    updateFocus();
-  }
-
-  function navigateDown() {
-    if (dropdownOpen) return;
-    var items = getItems(currentPanel);
-    if (items.length === 0) return;
-    currentItem++;
-    if (currentItem >= items.length) currentItem = 0;
-    updateFocus();
-  }
-
-  function navigateLeft() {
-    if (dropdownOpen) {
-      var items = getItems(currentPanel);
-      var el = items[currentItem];
-      if (!el) return;
-      var sel = el.querySelector('.custom-select');
-      if (sel) {
-        var opts = Array.from(sel.querySelectorAll('.cs-option'));
-        var idx = opts.findIndex(function(o) { return o.classList.contains('selected'); });
-        if (idx > 0) {
-          opts.forEach(function(o) { o.classList.remove('selected'); });
-          opts[idx - 1].classList.add('selected');
-          sel.querySelector('.cs-selected').textContent = opts[idx - 1].textContent;
-        }
-      }
-      return;
-    }
-
-    var items = getItems(currentPanel);
-    var el = items[currentItem];
-    if (el) {
-      var slider = el.querySelector('.slider-wrap');
-      if (slider) {
-        var fill = slider.querySelector('.slider-fill');
-        var current = parseFloat(fill.style.width) || 0;
-        var newVal = Math.max(0, current - 5);
-        fill.style.width = newVal + '%';
-        updateSliderLabel(el, newVal / 100);
-        return;
-      }
-    }
-
-    currentPanel--;
-    if (currentPanel < 0) currentPanel = panels.length - 1;
-    var items2 = getItems(currentPanel);
-    if (currentItem >= items2.length) currentItem = Math.max(0, items2.length - 1);
-    updateFocus();
-  }
-
-  function navigateRight() {
-    if (dropdownOpen) {
-      var items = getItems(currentPanel);
-      var el = items[currentItem];
-      if (!el) return;
-      var sel = el.querySelector('.custom-select');
-      if (sel) {
-        var opts = Array.from(sel.querySelectorAll('.cs-option'));
-        var idx = opts.findIndex(function(o) { return o.classList.contains('selected'); });
-        if (idx < opts.length - 1) {
-          opts.forEach(function(o) { o.classList.remove('selected'); });
-          opts[idx + 1].classList.add('selected');
-          sel.querySelector('.cs-selected').textContent = opts[idx + 1].textContent;
-        }
-      }
-      return;
-    }
-
-    var items = getItems(currentPanel);
-    var el = items[currentItem];
-    if (el) {
-      var slider = el.querySelector('.slider-wrap');
-      if (slider) {
-        var fill = slider.querySelector('.slider-fill');
-        var current = parseFloat(fill.style.width) || 0;
-        var newVal = Math.min(100, current + 5);
-        fill.style.width = newVal + '%';
-        updateSliderLabel(el, newVal / 100);
-        return;
-      }
-    }
-
-    currentPanel++;
-    if (currentPanel >= panels.length) currentPanel = 0;
-    var items2 = getItems(currentPanel);
-    if (currentItem >= items2.length) currentItem = Math.max(0, items2.length - 1);
-    updateFocus();
-  }
-
-  function selectItem() {
-    var items = getItems(currentPanel);
-    var el = items[currentItem];
-    if (!el) return;
-
-    var cb = el.querySelector('.checkbox');
-    if (cb) {
-      cb.classList.toggle('off');
-      return;
-    }
-
-    var sel = el.querySelector('.custom-select');
-    if (sel) {
-      var opts = sel.querySelector('.cs-options');
-      if (dropdownOpen) {
-        opts.classList.remove('open');
-        dropdownOpen = false;
-      } else {
-        document.querySelectorAll('.cs-options.open').forEach(function(o) { o.classList.remove('open'); });
-        var rect = sel.querySelector('.cs-selected').getBoundingClientRect();
-        opts.style.top = rect.bottom + 'px';
-        opts.style.left = rect.left + 'px';
-        opts.style.width = rect.width + 'px';
-        opts.classList.add('open');
-        dropdownOpen = true;
-      }
-      return;
-    }
-  }
-
-  function goBack() {
-    if (dropdownOpen) {
-      document.querySelectorAll('.cs-options.open').forEach(function(o) { o.classList.remove('open'); });
-      dropdownOpen = false;
-      return;
-    }
-  }
-
-  function switchTab(index) {
-    if (index < 0 || index >= tabs.length) return;
-    tabs.forEach(function(t) { t.classList.remove('active'); });
-    tabs[index].classList.add('active');
-    activeTab = index;
-    currentPanel = 0;
-    currentItem = 0;
-    updateFocus();
   }
 
   function updateSliderLabel(el, x) {
@@ -689,117 +574,17 @@
     else label.textContent = (x * 2).toFixed(2);
   }
 
-  document.addEventListener('keydown', function(e) {
-    if (e.key === 'PageUp') {
-      e.preventDefault();
-      toggleMenu();
-    }
-  });
-
   window.addEventListener('message', function(event) {
     var data = event.data;
     if (!data || !data.action) return;
-    switch(data.action) {
-      case 'navigate':
-        if (data.direction === 'up') navigateUp();
-        else if (data.direction === 'down') navigateDown();
-        else if (data.direction === 'left') navigateLeft();
-        else if (data.direction === 'right') navigateRight();
-        break;
-      case 'select':
-        selectItem();
-        break;
-      case 'back':
-        goBack();
-        break;
-      case 'toggle':
-        toggleMenu();
-        break;
-    }
-  });
-
-  document.querySelectorAll('.custom-select').forEach(function(sel) {
-    var selected = sel.querySelector('.cs-selected');
-    var options = sel.querySelector('.cs-options');
-
-    selected.addEventListener('click', function(e) {
-      e.stopPropagation();
-      var isOpen = options.classList.contains('open');
-      document.querySelectorAll('.cs-options.open').forEach(function(o) { o.classList.remove('open'); });
-      dropdownOpen = false;
-      if (!isOpen) {
-        var rect = selected.getBoundingClientRect();
-        options.style.top = rect.bottom + 'px';
-        options.style.left = rect.left + 'px';
-        options.style.width = rect.width + 'px';
-        options.classList.add('open');
-        dropdownOpen = true;
-      }
-    });
-
-    sel.querySelectorAll('.cs-option').forEach(function(opt) {
-      opt.addEventListener('click', function(e) {
-        e.stopPropagation();
-        sel.querySelectorAll('.cs-option').forEach(function(o) { o.classList.remove('selected'); });
-        opt.classList.add('selected');
-        selected.textContent = opt.textContent;
-        options.classList.remove('open');
-        dropdownOpen = false;
-      });
-    });
-  });
-
-  document.addEventListener('click', function() {
-    document.querySelectorAll('.cs-options.open').forEach(function(o) { o.classList.remove('open'); });
-    dropdownOpen = false;
-  });
-
-  document.querySelectorAll('.slider-wrap').forEach(function(wrap) {
-    wrap.addEventListener('mousedown', function(e) {
-      e.preventDefault();
-      var update = function(ev) {
-        var rect = wrap.getBoundingClientRect();
-        var x = Math.max(0, Math.min(1, (ev.clientX - rect.left) / rect.width));
-        wrap.querySelector('.slider-fill').style.width = (x * 100) + '%';
-        var field = wrap.closest('.field');
-        if (field) updateSliderLabel(field, x);
-      };
-      update(e);
-      var onMove = function(ev) { update(ev); };
-      document.addEventListener('mousemove', onMove);
-      document.addEventListener('mouseup', function() { document.removeEventListener('mousemove', onMove); }, { once: true });
-    });
-  });
-
-  document.querySelectorAll('.nav-tab').forEach(function(tab, index) {
-    tab.addEventListener('click', function() {
-      switchTab(index);
-    });
+    if (data.action === 'toggle') toggleMenu();
   });
 
   var menuEl = document.querySelector('.menu');
-  var headerEl = document.querySelector('.header');
   var startX = (window.innerWidth - menuEl.offsetWidth) / 2;
   var startY = (window.innerHeight - menuEl.offsetHeight) / 2;
   menuEl.style.left = startX + 'px';
   menuEl.style.top = startY + 'px';
-
-  headerEl.addEventListener('mousedown', function(e) {
-    if (e.target.classList.contains('nav-tab')) return;
-    e.preventDefault();
-    var shiftX = e.clientX - menuEl.getBoundingClientRect().left;
-    var shiftY = e.clientY - menuEl.getBoundingClientRect().top;
-    var onMove = function(ev) {
-      menuEl.style.left = (ev.clientX - shiftX) + 'px';
-      menuEl.style.top = (ev.clientY - shiftY) + 'px';
-    };
-    document.addEventListener('mousemove', onMove);
-    document.addEventListener('mouseup', function() {
-      document.removeEventListener('mousemove', onMove);
-    }, { once: true });
-  });
-
-  initNavigation();
 </script>
 </body>
 </html>

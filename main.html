@@ -1,1 +1,754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Game Menu</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Share+Tech+Mono&display=swap');
 
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .watermark {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #000116;
+    border: 1px solid #2D2D30;
+    border-top: 3px solid #6e6e6e;
+    padding: 5px 14px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    color: #fff;
+    letter-spacing: 1px;
+    white-space: nowrap;
+    z-index: 9999;
+  }
+
+  .menu {
+    width: 900px;
+    height: 600px;
+    overflow: visible;
+    background: #000116;
+    border: 1px solid #2D2D30;
+    border-top: 3px solid #6e6e6e;
+    border-radius: 0;
+    user-select: none;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+
+  #menu-canvas {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .header, .weapon-group {
+    position: relative;
+    z-index: 1;
+    background: #000116 !important;
+  }
+
+  .header {
+    display: flex;
+    align-items: center;
+    background: rgba(0,1,22,1);
+    border-bottom: 1px solid #2D2D30;
+    padding: 0 10px;
+    height: 34px;
+    gap: 2px;
+    flex-shrink: 0;
+  }
+
+  .nav-tab {
+    padding: 0 10px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    font-size: 12px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.8);
+    cursor: pointer;
+    transition: all 0.15s;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+  }
+  .nav-tab:hover { color: #fff; }
+  .nav-tab.active { color: #fff; border-bottom-color: #6e6e6e; }
+
+  .weapon-group {
+    padding: 8px 12px 6px;
+    border-bottom: 1px solid #2D2D30;
+    flex-shrink: 0;
+    background: rgba(0,1,22,1);
+    z-index: 10;
+  }
+
+  .label-sm {
+    font-size: 11px;
+    color: rgba(255,255,255,0.7);
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+    font-weight: 500;
+  }
+
+  .custom-select { position: relative; width: 100%; }
+  .custom-select.sm .cs-selected { font-size: 11px; padding: 4px 28px 4px 8px; }
+
+  .cs-selected {
+    background: #000116;
+    border: 1px solid #2D2D30;
+    color: rgba(255,255,255,0.85);
+    font-size: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 600;
+    padding: 5px 28px 5px 10px;
+    cursor: pointer;
+    transition: border-color 0.15s;
+    display: flex;
+    align-items: center;
+    letter-spacing: 0.3px;
+    position: relative;
+  }
+  .cs-selected:hover { border-color: rgba(110,110,110,0.6); }
+  .cs-selected::after {
+    content: '';
+    width: 10px; height: 6px;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' fill='none'%3E%3Cpath d='M1 1l4 4 4-4' stroke='rgba(255,255,255,0.3)' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat center;
+    background-size: contain;
+    position: absolute;
+    right: 10px;
+  }
+
+  .cs-options {
+    display: none;
+    position: fixed;
+    background: #000116;
+    border: 1px solid #2D2D30;
+    z-index: 999999;
+  }
+  .cs-options.open { display: block; }
+
+  .cs-option {
+    padding: 5px 10px;
+    font-size: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    color: rgba(255,255,255,0.75);
+    cursor: pointer;
+    transition: background 0.1s;
+    letter-spacing: 0.3px;
+  }
+  .cs-option:hover { background: #2D2D30; color: #fff; }
+  .cs-option.selected { background: #2D2D30; color: #fff; }
+  .custom-select.sm .cs-option { font-size: 11px; padding: 4px 8px; }
+
+  .panels {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    flex: 1;
+    overflow: hidden;
+    min-height: 0;
+    position: relative;
+  }
+
+  .panel {
+    padding: 10px 12px 12px;
+    border-right: 1px solid #2D2D30;
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: 100%;
+    background: rgba(0,1,22,0.6);
+    position: relative;
+    z-index: 2;
+  }
+  .panel:last-child { border-right: none; }
+
+  .panel::-webkit-scrollbar { width: 4px; }
+  .panel::-webkit-scrollbar-track { background: #2D2D30; }
+  .panel::-webkit-scrollbar-thumb { background: #6e6e6e; }
+  .panel::-webkit-scrollbar-thumb:hover { background: #aaa; }
+
+  .panel-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .toggle-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 8px;
+  }
+
+  .checkbox {
+    width: 14px; height: 14px;
+    background: #6e6e6e;
+    border-radius: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .checkbox::after {
+    content: '';
+    width: 8px; height: 5px;
+    border-left: 2px solid white;
+    border-bottom: 2px solid white;
+    transform: translateY(-1px) rotate(-45deg);
+    display: block;
+  }
+  .checkbox.off { background: rgba(255,255,255,0.1); }
+  .checkbox.off::after { display: none; }
+
+  .toggle-label { font-size: 12px; font-weight: 600; color: #fff; letter-spacing: 0.3px; }
+
+  .gear-btn {
+    margin-left: auto;
+    color: rgba(255,255,255,0.3);
+    font-size: 13px;
+    cursor: pointer;
+    transition: color 0.15s;
+  }
+  .gear-btn:hover { color: rgba(255,255,255,0.7); }
+
+  .field { margin-bottom: 6px; }
+
+  .field-label {
+    font-size: 10px;
+    color: rgba(255,255,255,0.7);
+    letter-spacing: 0.4px;
+    margin-bottom: 3px;
+    font-weight: 500;
+    text-transform: uppercase;
+  }
+
+  .field-value {
+    font-size: 11px;
+    color: rgba(255,255,255,0.9);
+    font-family: 'Share Tech Mono', monospace;
+    margin-bottom: 3px;
+  }
+
+  .slider-wrap {
+    position: relative;
+    height: 4px;
+    background: #2D2D30;
+    border-radius: 0;
+    cursor: pointer;
+  }
+  .slider-fill {
+    height: 100%;
+    border-radius: 0;
+    background: #6e6e6e;
+    transition: width 0.05s;
+  }
+
+  .focused {
+    outline: 1px solid rgba(110,110,110,0.8);
+    outline-offset: 1px;
+  }
+
+  hr.divider { border: none; border-top: 1px solid #2D2D30; margin: 8px 0; }
+</style>
+</head>
+<body>
+
+<div class="watermark">xyzmenu.xyz</div>
+
+<div class="menu">
+
+  <div class="header">
+    <div class="nav-tab active">Legit</div>
+    <div class="nav-tab">Visuals</div>
+    <div class="nav-tab">Misc</div>
+    <div class="nav-tab">Beta</div>
+    <div class="nav-tab">Configs</div>
+  </div>
+
+  <div class="weapon-group">
+    <div class="label-sm">Weapon group</div>
+    <div class="custom-select" data-value="Global">
+      <div class="cs-selected">Global</div>
+      <div class="cs-options">
+        <div class="cs-option selected">Global</div>
+        <div class="cs-option">Rifle</div>
+        <div class="cs-option">Pistol</div>
+        <div class="cs-option">Sniper</div>
+        <div class="cs-option">SMG</div>
+        <div class="cs-option">Shotgun</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panels">
+  <canvas id="menu-canvas"></canvas>
+
+    <div class="panel" data-panel="0">
+      <div class="panel-title">Aimbot <span class="gear-btn">⚙</span></div>
+      <div class="toggle-row" data-item="0">
+        <div class="checkbox" onclick="this.classList.toggle('off')"></div>
+        <span class="toggle-label">Enabled</span>
+      </div>
+      <div class="field" data-item="1">
+        <div class="field-label">Field of View</div>
+        <div class="field-value">10.00°</div>
+        <div class="slider-wrap"><div class="slider-fill" style="width:18%"></div></div>
+      </div>
+      <div class="field" data-item="2">
+        <div class="field-label">Hitboxes</div>
+        <div class="custom-select sm">
+          <div class="cs-selected">Head, Neck, Chest, ...</div>
+          <div class="cs-options">
+            <div class="cs-option selected">Head, Neck, Chest, ...</div>
+            <div class="cs-option">Head only</div>
+            <div class="cs-option">Body</div>
+          </div>
+        </div>
+      </div>
+      <div class="field" data-item="3">
+        <div class="field-label">Speed</div>
+        <div class="field-value">0.10</div>
+        <div class="slider-wrap"><div class="slider-fill" style="width:12%"></div></div>
+      </div>
+      <div class="field" data-item="4">
+        <div class="field-label">Curve strength</div>
+        <div class="field-value">0.50</div>
+        <div class="slider-wrap"><div class="slider-fill" style="width:50%"></div></div>
+      </div>
+      <div class="field" data-item="5">
+        <div class="field-label">Target switch delay</div>
+        <div class="field-value">112ms</div>
+        <div class="slider-wrap"><div class="slider-fill" style="width:35%"></div></div>
+      </div>
+      <div class="field" data-item="6">
+        <div class="field-label">Shots required</div>
+        <div class="field-value">0 shots</div>
+        <div class="slider-wrap"><div class="slider-fill" style="width:0%"></div></div>
+      </div>
+    </div>
+
+    <div class="panel" data-panel="1">
+      <div class="panel-title">Triggerbot</div>
+      <div class="toggle-row" data-item="0">
+        <div class="checkbox" onclick="this.classList.toggle('off')"></div>
+        <span class="toggle-label">Enabled</span>
+      </div>
+      <div class="field" data-item="1">
+        <div class="field-label">Hitboxes</div>
+        <div class="custom-select sm">
+          <div class="cs-selected">Head, Neck, Chest, ...</div>
+          <div class="cs-options">
+            <div class="cs-option selected">Head, Neck, Chest, ...</div>
+            <div class="cs-option">Head only</div>
+          </div>
+        </div>
+      </div>
+      <div class="field" data-item="2">
+        <div class="field-label">Hit chance</div>
+        <div class="field-value">70%</div>
+        <div class="slider-wrap"><div class="slider-fill" style="width:70%"></div></div>
+      </div>
+      <div class="field" data-item="3">
+        <div class="field-label">Reaction time</div>
+        <div class="field-value">109ms</div>
+        <div class="slider-wrap"><div class="slider-fill" style="width:40%"></div></div>
+      </div>
+    </div>
+
+    <div class="panel" data-panel="2">
+      <div class="panel-title">Silent <span class="gear-btn">⚙</span></div>
+      <div class="toggle-row" data-item="0">
+        <div class="checkbox" onclick="this.classList.toggle('off')"></div>
+        <span class="toggle-label">Enabled</span>
+      </div>
+      <div class="field" data-item="1">
+        <div class="field-label">Field of View</div>
+        <div class="field-value">10.00°</div>
+        <div class="slider-wrap"><div class="slider-fill" style="width:18%"></div></div>
+      </div>
+      <div class="field" data-item="2">
+        <div class="field-label">Hitboxes</div>
+        <div class="custom-select sm">
+          <div class="cs-selected">Head, Neck, Chest, ...</div>
+          <div class="cs-options">
+            <div class="cs-option selected">Head, Neck, Chest, ...</div>
+            <div class="cs-option">Head only</div>
+            <div class="cs-option">Body</div>
+          </div>
+        </div>
+      </div>
+      <div class="field" data-item="3">
+        <div class="field-label">Speed</div>
+        <div class="field-value">0.10</div>
+        <div class="slider-wrap"><div class="slider-fill" style="width:12%"></div></div>
+      </div>
+      <div class="field" data-item="4">
+        <div class="field-label">Curve strength</div>
+        <div class="field-value">0.50</div>
+        <div class="slider-wrap"><div class="slider-fill" style="width:50%"></div></div>
+      </div>
+      <div class="field" data-item="5">
+        <div class="field-label">Target switch delay</div>
+        <div class="field-value">112ms</div>
+        <div class="slider-wrap"><div class="slider-fill" style="width:35%"></div></div>
+      </div>
+      <div class="field" data-item="6">
+        <div class="field-label">Shots required</div>
+        <div class="field-value">0 shots</div>
+        <div class="slider-wrap"><div class="slider-fill" style="width:0%"></div></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  var currentPanel = 0;
+  var currentItem = 0;
+  var panels = [];
+  var tabs = [];
+  var activeTab = 0;
+  var dropdownOpen = false;
+
+  function initNavigation() {
+    tabs = Array.from(document.querySelectorAll('.nav-tab'));
+    panels = Array.from(document.querySelectorAll('.panel'));
+    updateFocus();
+  }
+
+  function getItems(panelIndex) {
+    if (!panels[panelIndex]) return [];
+    return Array.from(panels[panelIndex].querySelectorAll('[data-item]'));
+  }
+
+  function clearFocus() {
+    document.querySelectorAll('.focused').forEach(function(el) {
+      el.classList.remove('focused');
+    });
+  }
+
+  function updateFocus() {
+    clearFocus();
+    var items = getItems(currentPanel);
+    if (items.length > 0 && items[currentItem]) {
+      items[currentItem].classList.add('focused');
+      items[currentItem].scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    }
+  }
+
+  function navigateUp() {
+    if (dropdownOpen) return;
+    var items = getItems(currentPanel);
+    if (items.length === 0) return;
+    currentItem--;
+    if (currentItem < 0) currentItem = items.length - 1;
+    updateFocus();
+  }
+
+  function navigateDown() {
+    if (dropdownOpen) return;
+    var items = getItems(currentPanel);
+    if (items.length === 0) return;
+    currentItem++;
+    if (currentItem >= items.length) currentItem = 0;
+    updateFocus();
+  }
+
+  function navigateLeft() {
+    if (dropdownOpen) {
+      var items = getItems(currentPanel);
+      var el = items[currentItem];
+      if (!el) return;
+      var sel = el.querySelector('.custom-select');
+      if (sel) {
+        var opts = Array.from(sel.querySelectorAll('.cs-option'));
+        var idx = opts.findIndex(function(o) { return o.classList.contains('selected'); });
+        if (idx > 0) {
+          opts.forEach(function(o) { o.classList.remove('selected'); });
+          opts[idx - 1].classList.add('selected');
+          sel.querySelector('.cs-selected').textContent = opts[idx - 1].textContent;
+        }
+      }
+      return;
+    }
+
+    var items = getItems(currentPanel);
+    var el = items[currentItem];
+    if (el) {
+      var slider = el.querySelector('.slider-wrap');
+      if (slider) {
+        var fill = slider.querySelector('.slider-fill');
+        var current = parseFloat(fill.style.width) || 0;
+        var newVal = Math.max(0, current - 5);
+        fill.style.width = newVal + '%';
+        updateSliderLabel(el, newVal / 100);
+        return;
+      }
+    }
+
+    currentPanel--;
+    if (currentPanel < 0) currentPanel = panels.length - 1;
+    var items2 = getItems(currentPanel);
+    if (currentItem >= items2.length) currentItem = Math.max(0, items2.length - 1);
+    updateFocus();
+  }
+
+  function navigateRight() {
+    if (dropdownOpen) {
+      var items = getItems(currentPanel);
+      var el = items[currentItem];
+      if (!el) return;
+      var sel = el.querySelector('.custom-select');
+      if (sel) {
+        var opts = Array.from(sel.querySelectorAll('.cs-option'));
+        var idx = opts.findIndex(function(o) { return o.classList.contains('selected'); });
+        if (idx < opts.length - 1) {
+          opts.forEach(function(o) { o.classList.remove('selected'); });
+          opts[idx + 1].classList.add('selected');
+          sel.querySelector('.cs-selected').textContent = opts[idx + 1].textContent;
+        }
+      }
+      return;
+    }
+
+    var items = getItems(currentPanel);
+    var el = items[currentItem];
+    if (el) {
+      var slider = el.querySelector('.slider-wrap');
+      if (slider) {
+        var fill = slider.querySelector('.slider-fill');
+        var current = parseFloat(fill.style.width) || 0;
+        var newVal = Math.min(100, current + 5);
+        fill.style.width = newVal + '%';
+        updateSliderLabel(el, newVal / 100);
+        return;
+      }
+    }
+
+    currentPanel++;
+    if (currentPanel >= panels.length) currentPanel = 0;
+    var items2 = getItems(currentPanel);
+    if (currentItem >= items2.length) currentItem = Math.max(0, items2.length - 1);
+    updateFocus();
+  }
+
+  function selectItem() {
+    var items = getItems(currentPanel);
+    var el = items[currentItem];
+    if (!el) return;
+
+    var cb = el.querySelector('.checkbox');
+    if (cb) {
+      cb.classList.toggle('off');
+      return;
+    }
+
+    var sel = el.querySelector('.custom-select');
+    if (sel) {
+      var opts = sel.querySelector('.cs-options');
+      if (dropdownOpen) {
+        opts.classList.remove('open');
+        dropdownOpen = false;
+      } else {
+        document.querySelectorAll('.cs-options.open').forEach(function(o) { o.classList.remove('open'); });
+        var rect = sel.querySelector('.cs-selected').getBoundingClientRect();
+        opts.style.top = rect.bottom + 'px';
+        opts.style.left = rect.left + 'px';
+        opts.style.width = rect.width + 'px';
+        opts.classList.add('open');
+        dropdownOpen = true;
+      }
+      return;
+    }
+  }
+
+  function goBack() {
+    if (dropdownOpen) {
+      document.querySelectorAll('.cs-options.open').forEach(function(o) { o.classList.remove('open'); });
+      dropdownOpen = false;
+      return;
+    }
+  }
+
+  function switchTab(index) {
+    if (index < 0 || index >= tabs.length) return;
+    tabs.forEach(function(t) { t.classList.remove('active'); });
+    tabs[index].classList.add('active');
+    activeTab = index;
+    currentPanel = 0;
+    currentItem = 0;
+    updateFocus();
+  }
+
+  function updateSliderLabel(el, x) {
+    var label = el.querySelector('.field-value');
+    if (!label) return;
+    var text = label.textContent;
+    if (text.includes('%')) label.textContent = Math.round(x * 100) + '%';
+    else if (text.includes('ms')) label.textContent = Math.round(x * 300) + 'ms';
+    else if (text.includes('shots')) label.textContent = Math.round(x * 10) + ' shots';
+    else if (text.includes('°')) label.textContent = (x * 55).toFixed(2) + '°';
+    else label.textContent = (x * 2).toFixed(2);
+  }
+
+  window.addEventListener('message', function(event) {
+    var data = event.data;
+    if (!data || !data.action) return;
+    switch(data.action) {
+      case 'navigate':
+        if (data.direction === 'up') navigateUp();
+        else if (data.direction === 'down') navigateDown();
+        else if (data.direction === 'left') navigateLeft();
+        else if (data.direction === 'right') navigateRight();
+        break;
+      case 'select':
+        selectItem();
+        break;
+      case 'back':
+        goBack();
+        break;
+    }
+  });
+
+  var canvas = document.getElementById('menu-canvas');
+  var ctx = canvas.getContext('2d');
+  var panelsEl = document.querySelector('.panels');
+
+  function resizeCanvas() {
+    canvas.width = panelsEl.offsetWidth;
+    canvas.height = panelsEl.offsetHeight;
+  }
+  resizeCanvas();
+
+  var chars = '01アイウエカキクケコサシスセソタチツテトナニヌネノ';
+  var fontSize = 13;
+  var cols = Math.floor(canvas.width / fontSize);
+  var drops = [];
+  for (var i = 0; i < cols; i++) {
+    drops.push({
+      y: Math.random() * -50,
+      speed: 0.06 + Math.random() * 0.1,
+      chars: {},
+      opacity: 0.15 + Math.random() * 0.35
+    });
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.font = fontSize + "px 'JetBrains Mono', monospace";
+
+    drops.forEach(function(drop, col) {
+      drop.y += drop.speed;
+      if (drop.y * fontSize > canvas.height + 20 * fontSize) {
+        drop.y = Math.random() * -30;
+        drop.opacity = 0.15 + Math.random() * 0.35;
+      }
+
+      var trailLen = 18;
+      for (var i = 0; i < trailLen; i++) {
+        var row = Math.floor(drop.y) - i;
+        if (row < 0) continue;
+        if (!drop.chars[row]) drop.chars[row] = chars[Math.floor(Math.random() * chars.length)];
+        if (Math.random() < 0.02) drop.chars[row] = chars[Math.floor(Math.random() * chars.length)];
+
+        var alpha = (1 - i / trailLen) * drop.opacity;
+        if (i === 0) {
+          ctx.fillStyle = 'rgba(200, 220, 255, ' + Math.min(alpha * 2.5, 0.9) + ')';
+        } else {
+          var b = Math.floor(80 + (1 - i / trailLen) * 100);
+          ctx.fillStyle = 'rgba(60, ' + b + ', 200, ' + alpha + ')';
+        }
+        ctx.fillText(drop.chars[row], col * fontSize, row * fontSize);
+      }
+    });
+
+    requestAnimationFrame(draw);
+  }
+  draw();
+
+  document.querySelectorAll('.custom-select').forEach(function(sel) {
+    var selected = sel.querySelector('.cs-selected');
+    var options = sel.querySelector('.cs-options');
+
+    selected.addEventListener('click', function(e) {
+      e.stopPropagation();
+      var isOpen = options.classList.contains('open');
+      document.querySelectorAll('.cs-options.open').forEach(function(o) { o.classList.remove('open'); });
+      dropdownOpen = false;
+      if (!isOpen) {
+        var rect = selected.getBoundingClientRect();
+        options.style.top = rect.bottom + 'px';
+        options.style.left = rect.left + 'px';
+        options.style.width = rect.width + 'px';
+        options.classList.add('open');
+        dropdownOpen = true;
+      }
+    });
+
+    sel.querySelectorAll('.cs-option').forEach(function(opt) {
+      opt.addEventListener('click', function(e) {
+        e.stopPropagation();
+        sel.querySelectorAll('.cs-option').forEach(function(o) { o.classList.remove('selected'); });
+        opt.classList.add('selected');
+        selected.textContent = opt.textContent;
+        options.classList.remove('open');
+        dropdownOpen = false;
+      });
+    });
+  });
+
+  document.addEventListener('click', function() {
+    document.querySelectorAll('.cs-options.open').forEach(function(o) { o.classList.remove('open'); });
+    dropdownOpen = false;
+  });
+
+  document.querySelectorAll('.slider-wrap').forEach(function(wrap) {
+    wrap.addEventListener('mousedown', function(e) {
+      e.preventDefault();
+      var update = function(ev) {
+        var rect = wrap.getBoundingClientRect();
+        var x = Math.max(0, Math.min(1, (ev.clientX - rect.left) / rect.width));
+        wrap.querySelector('.slider-fill').style.width = (x * 100) + '%';
+        var field = wrap.closest('.field');
+        if (field) updateSliderLabel(field, x);
+      };
+      update(e);
+      var onMove = function(ev) { update(ev); };
+      document.addEventListener('mousemove', onMove);
+      document.addEventListener('mouseup', function() { document.removeEventListener('mousemove', onMove); }, { once: true });
+    });
+  });
+
+  document.querySelectorAll('.nav-tab').forEach(function(tab, index) {
+    tab.addEventListener('click', function() {
+      switchTab(index);
+    });
+  });
+
+  initNavigation();
+</script>
+</body>
+</html>
